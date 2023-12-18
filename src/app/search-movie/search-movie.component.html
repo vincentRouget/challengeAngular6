@@ -1,0 +1,85 @@
+<form (ngSubmit)="orderForm.valid && onSubmit()" [formGroup]="orderForm" #myForm="ngForm">
+    <!-- <div>
+        Form submitted ? {{myForm.submitted}}
+        Form valid ? {{orderForm.valid}}
+        Form invalid ? {{orderForm.invalid}}
+    </div> -->
+    <div class="champ">
+        <label for="identifiant-order">Identifiant</label>
+        <input name="identifiant-order" type="text" formControlName="identifiant">
+    </div>
+    <div *ngIf="orderForm.controls.identifiant.errors && orderForm.controls.titre.errors" class="condition">
+        <span *ngIf="orderForm.controls.identifiant.errors?.['minRequired']
+                    || orderForm.controls.titre.errors?.['minRequired']">L'un des deux champs 'Identifiant' ou 'Titre'
+            doit être renseigné</span>
+    </div>
+    <div class="champ">
+        <label for="titre-order">Titre</label>
+        <input name="titre-order" type="text" formControlName="titre">
+    </div>
+    <div *ngIf="orderForm.controls.identifiant.errors && orderForm.controls.titre.errors" class="condition">
+        <span *ngIf="orderForm.controls.identifiant.errors?.['minRequired']
+                    || orderForm.controls.titre.errors?.['minRequired']">L'un des deux champs 'Identifiant' ou 'Titre'
+            doit être renseigné</span>
+    </div>
+    <div class="champ">
+        <label for="type-order">Type</label>
+        <!-- <input name="type-order" type="text" formControlName="type"> -->
+        <select name="type-order" formControlName="type">
+            <option>{{type[0]}}</option>
+            <option>{{type[1]}}</option>
+            <option>{{type[2]}}</option>
+            <option>{{type[3]}}</option>
+        </select>
+    </div>
+    <div *ngIf="orderForm.controls.type.errors" class="condition">
+        <span *ngIf="orderForm.controls.type.errors?.['required']">Le champ type est requis</span>
+    </div>
+    <div class="champ">
+        <label for="year-order">Année de sortie</label>
+        <input name="year-order" type="number" formControlName="year">
+    </div>
+    <div *ngIf="orderForm.controls.year.errors" class="condition">
+        <span *ngIf="orderForm.controls.year.errors?.['required']">Le champ année est requis</span>
+        <span *ngIf="orderForm.controls.year.errors?.['incorrect']">L'année doit être comprise entre 1900 et
+            2023</span>
+    </div>
+    <div class="champ">
+        <label for="fiche-order">Fiche</label>
+        <!-- <input name="fiche-order" type="text" formControlName="fiche"> -->
+        <select name="fiche-order" formControlName="fiche">
+            <option>{{fiche[0]}}</option>
+            <option>{{fiche[1]}}</option>
+            <option>{{fiche[2]}}</option>
+        </select>
+    </div>
+    <div *ngIf="orderForm.controls.fiche.errors" class="condition">
+        <span *ngIf="orderForm.controls.fiche.errors?.['required']">Le champ fiche est requis</span>
+    </div>
+    <div class="button">
+        <button type="reset">Restaurer</button>
+        <button type="submit">Sauvegarder</button>
+    </div>
+    <!-- <div formArrayName="payments">
+        <b>Payments : </b> <button type="button" (click)="addPayments()">Ajouter date paiement</button>
+        <ng-container *ngFor="let payment of payments.controls; let i = index" [formGroupName]="i">            <div>
+                <label for="date-{{ i }}">Date</label>
+                <input name="date-{{ i }}" type="date" formControlName="date" />
+                <span *ngIf="payment.get('date')?.errors?.['required']">
+                    Le champ est requis
+                </span>
+                <span *ngIf="payment.get('date')?.errors?.['min'] != undefined">
+                    La date doit être dans le futur
+                </span>
+            </div>
+            <div>
+                <label for="amount-{{ i }}">Montant</label>
+                <input name="amount-{{ i }}" type="text" formControlName="amount" />
+                <span *ngIf="payment.get('amount')?.errors?.['required']">
+                    Le champ montant est requis
+                </span>
+            </div>
+            <hr />
+        </ng-container>
+    </div> -->
+</form>
