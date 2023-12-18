@@ -10,34 +10,43 @@ import { AbstractControl, ValidatorFn, ValidationErrors } from "@angular/forms";
 export class SearchMovieComponent {
 
   constructor(private formBuilder: FormBuilder) { };
-  type: string[] = ["Type", "Film", "Série", "Episode"];
-  fiche: string[] = ["Fiche", "Complète", "Courte"];
+  type: string[] = ["Film", "Série", "Episode"];
+  fiche: string[] = ["Complète", "Courte"];
   selectedDate: number | null = null;
   newInput: string = '';
 
   orderForm = this.formBuilder.group({
-    identifiant: ['', minRequired(this.newInput)],
-    titre: ['', minRequired(this.newInput)],
-    type: ['', Validators.required],
-    year: [null, [Validators.required, dateValidator(this.selectedDate)]],
-    fiche: ['', Validators.required],
-    // payments: this.formBuilder.array([]),
+    identifiant: ['', isRequiredValidator(this.newInput)],
+    titre: ['', isRequiredValidator(this.newInput)],
+    type: [''],
+    year: [null, [Validators.required, rangeDateValidator(this.selectedDate)]],
+    fiche: [''],
   });
+
+
   ngOnInit() {
     // get Observable from FormGroup
-    this.orderForm.valueChanges
-      // listen to value change
-      .subscribe(value => {
-        console.log('orderForm value changes : ', value);
-      });
+    this.patchDefaultValue();
+    this.orderForm.valueChanges.subscribe(value => {
+      console.log('orderForm value changes : ', value);
+    });
   };
+
+  patchDefaultValue(): void {
+    this.orderForm.patchValue({
+      type: this.type[1], // Set the default 'type' value
+      fiche: this.fiche[1] // Set the default 'fiche' value
+    });
+    console.log('Default values set:', this.orderForm.value);
+  }
+
   onSubmit() {
     // Get form value as JSON object
     console.log('oderForm submitted : ', this.orderForm.value);
   };
 };
 
-export function dateValidator(selectedDate: number | null): ValidatorFn {
+export function rangeDateValidator(selectedDate: number | null): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const selectedDate = control.value;
     const currentYear: number = new Date().getFullYear();
@@ -49,7 +58,7 @@ export function dateValidator(selectedDate: number | null): ValidatorFn {
   };
 };
 
-export function minRequired(newInput: string): ValidatorFn {
+export function isRequiredValidator(newInput: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const newInput = control.value;
     if (newInput !== '') {
